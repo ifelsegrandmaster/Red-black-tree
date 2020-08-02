@@ -142,7 +142,7 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
 					k = k.parent.parent;
 				} else {
 					if (k == k.parent.left) {
-						// case 3.2.2
+						// case 3.2.2 
 						k = k.parent;
 						rightRotate(k);
 					}
