@@ -67,12 +67,12 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
         // If the tree is empty, return a new node
         // Ordinary Binary Search Insertion
         Node newNode = new Node();
-        node.parent = null;
-        node.data = s;
-        node.left = TNULL;
-        node.right = TNULL;
-        node.color = 1; // new node must be red
-        node.size = 1; //new node must have size of 1
+        newNode.parent = null;
+        newNode.data = s;
+        newNode.left = TNULL;
+        newNode.right = TNULL;
+        newNode.color = 1; // new node must be red
+        newNode.size = 1; //new node must have size of 1
 
         if (node == TNULL){
             newNode.parent = node;
