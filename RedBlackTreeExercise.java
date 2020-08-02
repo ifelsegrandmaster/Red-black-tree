@@ -87,19 +87,7 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
         return 0;
     }
   
-   // Helper function to traverse the tree
-    private int inOrderHelper(Node node, T key) {
-        if (node != TNULL) {
-            inOrderHelper(node.left, key);
-            if (node.data.compareTo(key) == 0) {
-                return rankIndex;
-            }
-            inOrderHelper(node.right, key);
-            rankIndex++;
-        }
-
-        return -1;
-    }
+   
    
 
     // rotate right at node x
