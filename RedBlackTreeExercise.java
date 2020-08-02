@@ -73,7 +73,11 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
         newNode.right = TNULL;
         newNode.color = 1; // new node must be red
         newNode.size = 1; //new node must have size of 1
-
+	
+	if(this.root == TNULL){
+            this.root = newNode;
+            return this.root;
+        }
         if (node == TNULL){
             newNode.parent = node;
             return newNode;
