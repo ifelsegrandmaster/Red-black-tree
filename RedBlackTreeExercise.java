@@ -83,27 +83,22 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
     }
     //Search for an item that was previously added to the tree
     public int rank(T s){
-        int rank;
         //search for the node
         return 0;
     }
-    //Helper function to get the height of the tree
-    private int height(Node root){
-        int lefth, righth;
-
-        if(root == TNULL || (root.left == TNULL && root.right == TNULL)){
-            return 0;
+  
+   // Helper function to traverse the tree
+    private int inOrderHelper(Node node, T key) {
+        if (node != TNULL) {
+            inOrderHelper(node.left, key);
+            if (node.data.compareTo(key) == 0) {
+                return rankIndex;
+            }
+            inOrderHelper(node.right, key);
+            rankIndex++;
         }
-        lefth = height(root.left);
-        righth = height(root.right);
-        return (Math.max(lefth, righth) + 1);
-    }
 
-    //Helper function to search for a node
-    private int search(Node node, T key){
-        if(node == TNULL || key.compareTo(node.data) == 0){
-             return node;
-        }
+        return -1;
     }
    
 
