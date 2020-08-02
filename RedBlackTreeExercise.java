@@ -29,25 +29,55 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
 
     // Add a new item to the tree
     public void add(T s) {
-        // 1. Insert
-        Node newNode = insertNode(root, s);
+       // Ordinary Binary Search Insertion
+		Node node = new Node();
+		node.parent = null;
+		node.data = s;
+		node.left = TNULL;
+		node.right = TNULL;
+		node.color = 1; // new node must be red
 
-        //if node is a root node, simply return
-        if(newNode.parent == null){
-           newNode.color = 0; //color it black
-           return;
-        }
-        //if grandparent is null, simply return
-        if(newNode.parent.parent == null){
-            return;
-        }
-        // Fix the tree
-        fixInsert(newNode);
+		Node y = null;
+		Node x = this.root;
+
+		while (x != TNULL) {
+			y = x;
+			if (node.data.compareTo(x.data)  < 0) {
+				x = x.left;
+			} else {
+				x = x.right;
+			}
+		}
+
+		// y is parent of x
+		node.parent = y;
+		if (y == null) {
+			root = node;
+		} else if (node.data.compareTo(y.data)  < 0) {
+			y.left = node;
+		} else if (node.data.compareTo(y.data)  > 0) {
+			y.right = node;
+		}
+
+		// if new node is a root node, simply return
+		if (node.parent == null){
+			node.color = 0;
+			return;
+		}
+
+		// if the grandparent is null, simply return
+		if (node.parent.parent == null) {
+			return;
+		}
+
+		// Fix the tree
+		fixInsert(node);
     }
 
     // The number of items that have been added to the tree
     public int size() {
-        return root.size;
+
+        return root.size - 1;
     }
 
     // Find an item by it's rank according to the natural
@@ -62,58 +92,51 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
         return 0;
     }
 
-    // Helper function to insert an item
-    private Node insertNode(Node node, T s) {
-        // If the tree is empty, return a new node
-        // Ordinary Binary Search Insertion
-        Node newNode = new Node();
-        newNode.parent = null;
-        newNode.data = s;
-        newNode.left = TNULL;
-        newNode.right = TNULL;
-        newNode.color = 1; // new node must be red
-        newNode.size = 1; //new node must have size of 1
-	
-	if(this.root == TNULL){
-            this.root = newNode;
-            return this.root;
-        }
-        if (node == TNULL){
-            newNode.parent = node;
-            return newNode;
-        }
-        else if (newNode.data.compareTo(node.data) < 0) {
-            node.left = insertNode(node.left, s);
-            // Update the size of the tree
-
-        } else if (newNode.data.compareTo(node.data) > 0) {
-            node.right = insertNode(node.right, s);
-            // Update the size of the tree
-        }
-        node.size = Math.max(node.left.size,node.right.size) + 1;
-        
-        //Return the unchanged node
-        return node;
-    }
+   
     //Inorder helper function
     public void inOrderHelper(Node node) {
 		if (node != TNULL) {
 			inOrderHelper(node.left);
-			System.out.print(node.data + " ");
+			System.out.println(node.data +  " ");
 			inOrderHelper(node.right);
         } 
         
     }
+
+    private void printHelper(Node root, String indent, boolean last) {
+		// print the tree structure on the screen
+	   	if (root != TNULL) {
+		   System.out.print(indent);
+		   if (last) {
+		      System.out.print("R----");
+		      indent += "     ";
+		   } else {
+		      System.out.print("L----");
+		      indent += "|    ";
+		   }
+            
+           String sColor = root.color == 1?"RED":"BLACK";
+		   System.out.println(root.data + "(" + sColor + ")");
+		   printHelper(root.left, indent, false);
+		   printHelper(root.right, indent, true);
+		}
+    }
+    
+    // print the tree structure on the screen
+	public void prettyPrint() {
+        printHelper(this.root, "", true);
+	}
     
     public static void main(String [] args){
         RedBlackTreeExercise<Integer> rb = new RedBlackTreeExercise<>();
         rb.add(12);
         rb.add(23);
         rb.add(25);
-        rb.add(2);
-        rb.add(2);
-        rb.add(10);
         rb.inOrderHelper(rb.getRootNode());
+        System.out.println();
+        System.out.println(rb.getRootNode().size);
+        rb.prettyPrint();
+
     }
 
     // rotate right at node x
