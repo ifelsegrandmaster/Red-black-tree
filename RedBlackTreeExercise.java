@@ -23,77 +23,77 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
         root = TNULL;
     }
 
-    //Get the root node
-    public Node getRootNode(){
+    // Get the root node
+    public Node getRootNode() {
         return this.root;
     }
 
     // Add a new item to the tree
     public void add(T s) {
-       // Ordinary Binary Search Insertion
-		Node node = new Node();
-		node.parent = null;
-		node.data = s;
-		node.left = TNULL;
-		node.right = TNULL;
-		node.color = 1; // new node must be red
+        // Ordinary Binary Search Insertion
+        Node node = new Node();
+        node.parent = null;
+        node.data = s;
+        node.left = TNULL;
+        node.right = TNULL;
+        node.color = 1; // new node must be red
 
-		Node y = null;
-		Node x = this.root;
+        Node y = null;
+        Node x = this.root;
 
-		while (x != TNULL) {
-			y = x;
-			if (node.data.compareTo(x.data)  < 0) {
-				x = x.left;
-			} else {
-				x = x.right;
-			}
-		}
+        while (x != TNULL) {
+            y = x;
+            if (node.data.compareTo(x.data) < 0) {
+                x = x.left;
+            } else {
+                x = x.right;
+            }
+        }
 
         // y is parent of x
         Node z;
         node.parent = y;
         z = node;
-		if (y == null) {
-			root = node;
-		} else if (node.data.compareTo(y.data)  < 0) {
+        if (y == null) {
+            root = node;
+        } else if (node.data.compareTo(y.data) < 0) {
             y.left = node;
-            //Update the size
-            while(z != null){
+            // Update the size
+            while (z != null) {
                 z.size++;
                 System.out.print("Going up");
                 z = z.parent;
             }
-		} else if (node.data.compareTo(y.data)  > 0) {
+        } else if (node.data.compareTo(y.data) > 0) {
             y.right = node;
-            //Update the size;
-            while(z != null){
+            // Update the size;
+            while (z != null) {
                 z.size++;
                 System.out.print("Going up");
                 z = z.parent;
             }
         }
-        
-        //If new node has been inserted update the size
-        while(z != null){
+
+        // If new node has been inserted update the size
+        while (z != null) {
             z.size++;
             System.out.print("Going up");
             z = z.parent;
         }
 
-		// if new node is a root node, simply return
-		if (node.parent == null){
-			node.color = 0;
-			return;
-		}
+        // if new node is a root node, simply return
+        if (node.parent == null) {
+            node.color = 0;
+            return;
+        }
 
-		// if the grandparent is null, simply return
-		if (node.parent.parent == null) {
-			return;
-		}
+        // if the grandparent is null, simply return
+        if (node.parent.parent == null) {
+            return;
+        }
 
-		// Fix the tree
-		fixInsert(node);
+        // Fix the tree
+        fixInsert(node);
     }
 
     // The number of items that have been added to the tree
@@ -114,42 +114,41 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
         return 0;
     }
 
-   
-    //Inorder helper function
+    // Inorder helper function
     public void inOrderHelper(Node node) {
-		if (node != TNULL) {
-			inOrderHelper(node.left);
-			System.out.println(node.data +  " ");
-			inOrderHelper(node.right);
-        } 
-        
+        if (node != TNULL) {
+            inOrderHelper(node.left);
+            System.out.println(node.data + " ");
+            inOrderHelper(node.right);
+        }
+
     }
 
     private void printHelper(Node root, String indent, boolean last) {
-		// print the tree structure on the screen
-	   	if (root != TNULL) {
-		   System.out.print(indent);
-		   if (last) {
-		      System.out.print("R----");
-		      indent += "     ";
-		   } else {
-		      System.out.print("L----");
-		      indent += "|    ";
-		   }
-            
-           String sColor = root.color == 1?"RED":"BLACK";
-		   System.out.println(root.data + "(" + sColor + ") (" + root.size +")" );
-		   printHelper(root.left, indent, false);
-		   printHelper(root.right, indent, true);
-		}
+        // print the tree structure on the screen
+        if (root != TNULL) {
+            System.out.print(indent);
+            if (last) {
+                System.out.print("R----");
+                indent += "     ";
+            } else {
+                System.out.print("L----");
+                indent += "|    ";
+            }
+
+            String sColor = root.color == 1 ? "RED" : "BLACK";
+            System.out.println(root.data + "(" + sColor + ") (" + root.size + ")");
+            printHelper(root.left, indent, false);
+            printHelper(root.right, indent, true);
+        }
     }
-    
+
     // print the tree structure on the screen
-	public void prettyPrint() {
+    public void prettyPrint() {
         printHelper(this.root, "", true);
-	}
-    
-    public static void main(String [] args){
+    }
+
+    public static void main(String[] args) {
         RedBlackTreeExercise<Integer> rb = new RedBlackTreeExercise<>();
         rb.add(12);
         rb.add(23);
@@ -160,7 +159,7 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
         System.out.println();
         rb.prettyPrint();
         System.out.println(rb.getRootNode().size);
-        
+
     }
 
     // rotate right at node x
