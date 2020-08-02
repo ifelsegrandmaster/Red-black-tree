@@ -7,11 +7,11 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
             Node left; //pointer to the left child
             Node right; //pointer to the right child
             int color; //1. Red, O. Black
+	    int size; //size of the current node
     }
 
     private Node TNULL;
     private Node root;
-    private int size;
     private int rankIndex;
     //ctor for initialization
     public RedBlackTreeExercise(){
@@ -19,8 +19,8 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
         TNULL.color = 0;
         TNULL.left = null;
         TNULL.right = null;
+	TNULL.size = 0;
         root = TNULL;
-        size = 0;
     }
     //Add a new item to the tree
     public void add(T s){
@@ -34,7 +34,7 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
 
 		Node y = null;
 		Node x = this.root;
-
+		
 		while (x != TNULL) {
 			y = x;
 			if (node.data.compareTo(x.data) < 0) {
@@ -51,12 +51,12 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
 		} else if (node.data.compareTo(y.data) < 0) {
             y.left = node;
             //Update the size of the tree
-            size++;
-		} else if(node.data.compareTo(y.data) > 0) {
+         
+	   } else if(node.data.compareTo(y.data) > 0) {
             y.right = node;
             //Update the size of the tree
-            size++;
-		}
+	       y.size++;
+	    }
 
 		// if new node is a root node, simply return
 		if (node.parent == null){
