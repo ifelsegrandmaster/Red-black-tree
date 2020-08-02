@@ -19,6 +19,7 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
         TNULL.left = null;
         TNULL.right = null;
         TNULL.size = 0;
+        TNULL.parent = null;
         root = TNULL;
     }
 
@@ -49,15 +50,36 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
 			}
 		}
 
-		// y is parent of x
-		node.parent = y;
+        // y is parent of x
+        Node z;
+        node.parent = y;
+        z = node;
 		if (y == null) {
 			root = node;
 		} else if (node.data.compareTo(y.data)  < 0) {
-			y.left = node;
+            y.left = node;
+            //Update the size
+            while(z != null){
+                z.size++;
+                System.out.print("Going up");
+                z = z.parent;
+            }
 		} else if (node.data.compareTo(y.data)  > 0) {
-			y.right = node;
-		}
+            y.right = node;
+            //Update the size;
+            while(z != null){
+                z.size++;
+                System.out.print("Going up");
+                z = z.parent;
+            }
+        }
+        
+        //If new node has been inserted update the size
+        while(z != null){
+            z.size++;
+            System.out.print("Going up");
+            z = z.parent;
+        }
 
 		// if new node is a root node, simply return
 		if (node.parent == null){
@@ -77,7 +99,7 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
     // The number of items that have been added to the tree
     public int size() {
 
-        return root.size - 1;
+        return root.size;
     }
 
     // Find an item by it's rank according to the natural
@@ -116,7 +138,7 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
 		   }
             
            String sColor = root.color == 1?"RED":"BLACK";
-		   System.out.println(root.data + "(" + sColor + ")");
+		   System.out.println(root.data + "(" + sColor + ") (" + root.size +")" );
 		   printHelper(root.left, indent, false);
 		   printHelper(root.right, indent, true);
 		}
@@ -132,11 +154,13 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
         rb.add(12);
         rb.add(23);
         rb.add(25);
+        rb.add(1);
+        rb.add(13);
         rb.inOrderHelper(rb.getRootNode());
         System.out.println();
-        System.out.println(rb.getRootNode().size);
         rb.prettyPrint();
-
+        System.out.println(rb.getRootNode().size);
+        
     }
 
     // rotate right at node x
@@ -197,7 +221,9 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
                     }
                     // case 3.2.1
                     k.parent.color = 0;
+                    k.parent.size += 1;
                     k.parent.parent.color = 1;
+                    k.parent.parent.size -= 2;
                     leftRotate(k.parent.parent);
                 }
             } else {
@@ -217,7 +243,9 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
                     }
                     // mirror case 3.2.1
                     k.parent.color = 0;
+                    k.parent.size += 1;
                     k.parent.parent.color = 1;
+                    k.parent.parent.size -= 2;
                     rightRotate(k.parent.parent);
                 }
             }
