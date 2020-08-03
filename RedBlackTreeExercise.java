@@ -45,8 +45,11 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
             y = x;
             if (node.data.compareTo(x.data) < 0) {
                 x = x.left;
-            } else {
+            } else if(node.data.compareTo(x.data) > 0) {
                 x = x.right;
+            } else if(node.data.compareTo(x.data) == 0){
+                //Do nothing if the node is already there
+                return;
             }
         }
 
@@ -59,17 +62,11 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
         } else if (node.data.compareTo(y.data) < 0) {
             y.left = node;
             // Update the size
-            while (z != null) {
-                z.size++;
-                z = z.parent;
-            }
+            updateSizeHelper(y.left);
         } else if (node.data.compareTo(y.data) > 0) {
             y.right = node;
             // Update the size;
-            while (z != null) {
-                z.size++;
-                z = z.parent;
-            }
+            updateSizeHelper(y.right);
         }
         // If new node has been inserted update the size
         // if new node is a root node, simply return
@@ -121,6 +118,19 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
             y = y.parent;
         }
         return r;
+    }
+
+    //Update the size of a node helper
+    private void updateSizeHelper(Node node){
+        //Calculate the size
+        // size(x) = size(left) + size(right) + 1;
+        Node x = node;
+        int size;
+        while(x != null){
+           size = (x.left.size + x.right.size) + 1;
+           x.size = size;
+           x = x.parent;
+        }
     }
 
     // Inorder helper function
@@ -210,7 +220,7 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
         // Find the node in a tree
         //int k = rb.get(6);
         //System.out.println("Found " + k);
-        int rank = rb.rank(78);
+        int rank = rb.rank(1);
         System.out.println("Rank of k " + rank);
 
     }
@@ -232,6 +242,9 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
         }
         y.right = x;
         x.parent = y;
+        //Update the sizes
+        x.size = y.size;
+        y.size = (y.left.size + y.right.size) + 1;
     }
 
     // rotate left at node x
@@ -251,6 +264,9 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
         }
         y.left = x;
         x.parent = y;
+        //Update the sizes
+        y.size = x.size;
+        x.size = (x.left.size + x.right.size) + 1;
     }
 
     // fix the red-black tree
@@ -273,9 +289,9 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
                     }
                     // case 3.2.1
                     k.parent.color = 0;
-                    k.parent.size += 1;
+                    //k.parent.size += 1;
                     k.parent.parent.color = 1;
-                    k.parent.parent.size -= 2;
+                    //k.parent.parent.size -= 2;
                     leftRotate(k.parent.parent);
                 }
             } else {
@@ -295,9 +311,9 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
                     }
                     // mirror case 3.2.1
                     k.parent.color = 0;
-                    k.parent.size += 1;
+                    //k.parent.size += 1;
                     k.parent.parent.color = 1;
-                    k.parent.parent.size -= 2;
+                    //k.parent.parent.size -= 2;
                     rightRotate(k.parent.parent);
                 }
             }
