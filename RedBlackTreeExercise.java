@@ -61,7 +61,6 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
             // Update the size
             while (z != null) {
                 z.size++;
-                System.out.print("Going up");
                 z = z.parent;
             }
         } else if (node.data.compareTo(y.data) > 0) {
@@ -69,18 +68,10 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
             // Update the size;
             while (z != null) {
                 z.size++;
-                System.out.print("Going up");
                 z = z.parent;
             }
         }
-
         // If new node has been inserted update the size
-        while (z != null) {
-            z.size++;
-            System.out.print("Going up");
-            z = z.parent;
-        }
-
         // if new node is a root node, simply return
         if (node.parent == null) {
             node.color = 0;
@@ -98,20 +89,38 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
 
     // The number of items that have been added to the tree
     public int size() {
-
         return root.size;
     }
 
     // Find an item by it's rank according to the natural
     // comparable order
     public T get(int rank) {
-        return null;
+        Node find;
+        if ((rank >= 0) && (rank < root.size)) {
+            find = select(this.root, rank);
+            return find.data;
+        }
+        throw new IndexOutOfBoundsException();
     }
 
     // Search for an item that was previously added to the tree
     public int rank(T s) {
         // search for the node
-        return 0;
+        Node x = search(s);
+
+        if(x == TNULL)
+           return -1; //Doesn't exist
+
+        int r = (x.left.size) + 1;
+        Node y = x;
+
+        while(y != root){
+            if(y == y.parent.right){
+                r = r + (y.parent.left.size) + 1;
+            }
+            y = y.parent;
+        }
+        return r;
     }
 
     // Inorder helper function
@@ -123,6 +132,39 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
         }
 
     }
+    //Select helper function
+    private Node select(Node node, int i) {
+      
+        int r = ((node.left.size) + 1);
+        if (i == r)
+            return node;
+        else if (i < r)
+            return select(node.left, i);
+        else 
+            return select(node.right, i - r);
+
+    }
+
+    //Seaarch helper function
+    private Node search(T key){
+        Node x = this.root;
+        while(x != null){
+            //compare if the key is the one we searching for
+            if(key.compareTo(x.data) < 0){
+                //move left
+                x = x.left;
+            } else if(key.compareTo(x.data) > 0){
+               //move right
+               x = x.right;
+            } else if(key.compareTo(x.data) == 0){
+                return x;
+            }
+        }
+
+        return TNULL;
+    }
+
+
 
     private void printHelper(Node root, String indent, boolean last) {
         // print the tree structure on the screen
@@ -155,10 +197,21 @@ public class RedBlackTreeExercise<T extends Comparable<T>> {
         rb.add(25);
         rb.add(1);
         rb.add(13);
+        rb.add(34);
+        rb.add(40);
+        rb.add(56);
+        rb.add(45);
+        rb.add(78);
+
         rb.inOrderHelper(rb.getRootNode());
         System.out.println();
         rb.prettyPrint();
         System.out.println(rb.getRootNode().size);
+        // Find the node in a tree
+        //int k = rb.get(6);
+        //System.out.println("Found " + k);
+        int rank = rb.rank(78);
+        System.out.println("Rank of k " + rank);
 
     }
 
